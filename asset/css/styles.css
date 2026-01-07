@@ -1243,6 +1243,7 @@ form .flat-alert {
 }
 .slider-partners .swiper-slide-active .partners-item img {
   opacity: 1;
+  
 }
 
 .slider-playground a {
@@ -3347,6 +3348,7 @@ header .mobile-menu {
   padding: 46px 15px 47px 15px;
   border-radius: 24px;
   text-align: center;
+  height: auto;
 }
 .section-tech-stack .tech-stack-item .title {
   margin-bottom: 16px;
