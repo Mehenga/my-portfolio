@@ -316,22 +316,37 @@
     // infiniteSlide
     var infiniteSlide = function () {
         $(".infiniteslide").each(function () {
-          var $this = $(this);
-          var style = $this.data("style") || "left";
-          var clone = parseInt($this.data("clone"),10) || 2;
-          var speed = parseInt($this.data("speed"),10) || 100;
-      
-          $this.infiniteslide({
-            speed: speed,
-            direction: style,
-            clone: clone,
-          });
+            var $this = $(this);
+            var style = $this.data("style") || "left";
+            var clone = parseInt($this.data("clone"), 10) || 2;
+            var speed = parseInt($this.data("speed"), 10) || 100;
+
+            $this.infiniteslide({
+                speed: speed,
+                direction: style,
+                clone: clone,
+            });
         });
     };
 
-    // stickyTabs
+    // stickyTabs and smooth scroll
     var stickyTabs = function () {
         let sectionIds = $('a.scroll-to');
+
+        // Smooth scrolling on click
+        sectionIds.on('click', function (e) {
+            e.preventDefault();
+            let target = $($(this).attr('href'));
+            if (target.length) {
+                let targetOffset = target.offset().top;
+                $('html, body').animate({
+                    scrollTop: targetOffset
+                }, 800, 'swing');
+            }
+            $(this).closest('.tf-canvas').removeClass("active"); // close mobile menu if applicable
+        });
+
+        // Update active class on scroll
         $(document).scroll(function () {
             sectionIds.each(function () {
                 let container = $(this).attr('href');
@@ -340,9 +355,9 @@
                 let containerBottom = containerOffset + containerHeight;
                 let scrollPosition = $(document).scrollTop();
                 if (scrollPosition < containerBottom - 20 && scrollPosition >= containerOffset - 20) {
-                $(this).addClass('active');
+                    $(this).addClass('active');
                 } else {
-                $(this).removeClass('active');
+                    $(this).removeClass('active');
                 }
             });
         });
@@ -359,7 +374,7 @@
     // settings_color
     var settings_color = function () {
         $(".settings-color a").on("click", function () {
-            var index =  $(this).index() + 1;
+            var index = $(this).index() + 1;
             $("body").attr("data-color-primary", "color-primary-" + index);
         })
     }
