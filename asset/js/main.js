@@ -333,15 +333,15 @@
     var stickyTabs = function () {
         let sectionIds = $('a.scroll-to');
 
-        // Smooth scrolling on click
+        // Native Smooth scrolling on click
         sectionIds.on('click', function (e) {
             e.preventDefault();
-            let target = $($(this).attr('href'));
-            if (target.length) {
-                let targetOffset = target.offset().top;
-                $('html, body').animate({
-                    scrollTop: targetOffset
-                }, 800, 'swing');
+            let target = document.querySelector($(this).attr('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
             $(this).closest('.tf-canvas').removeClass("active"); // close mobile menu if applicable
         });
