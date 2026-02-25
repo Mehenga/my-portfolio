@@ -364,8 +364,18 @@
         })
     }
 
+    // preloader
+    var preloader = function () {
+        $(window).on('load', function () {
+            setTimeout(function () {
+                $('#preloader').addClass('loaded');
+            }, 1000);
+        });
+    }
+
     // Dom Ready
     $(function () {
+        preloader();
         animateText();
         tabs();
         ajaxContactForm();
