@@ -381,11 +381,18 @@
 
     // preloader
     var preloader = function () {
-        $(window).on('load', function () {
-            setTimeout(function () {
-                $('#preloader').addClass('loaded');
-            }, 1000);
-        });
+        const hidePreloader = () => {
+            $('#preloader').addClass('loaded');
+        };
+
+        if (document.readyState === 'complete') {
+            hidePreloader();
+        } else {
+            $(window).on('load', hidePreloader);
+            // Fallback: forcefully hide the preloader after 3 seconds 
+            // even if heavy assets like bg videos haven't finished loading.
+            setTimeout(hidePreloader, 3000);
+        }
     }
 
     // Dom Ready
