@@ -155,38 +155,69 @@
             $(this).validate({
                 submitHandler: function (form) {
                     var $form = $(form),
-                        str = $form.serialize(),
-                        loading = $('<div />', { 'class': 'loading' });
+                        loading = $('<div />', { 'class': 'loading', 'text': ' Sending...' });
+
+                    var object = {};
+                    var formData = new FormData(form);
+                    formData.forEach(function(value, key){
+                        object[key] = value;
+                    });
+                    var json = JSON.stringify(object);
 
                     $.ajax({
                         type: "POST",
-                        url: $form.attr('action'),
-                        data: str,
+                        url: "https://api.web3forms.com/submit",
+                        data: json,
+                        contentType: "application/json",
+                        dataType: "json", // Web3forms needs this to return json
                         beforeSend: function () {
                             $form.find('.send-wrap').append(loading);
+                            // Clear previous alerts
+                            $form.find('.flat-alert').remove();
                         },
-                        success: function (msg) {
+                        success: function (response) {
                             var result, cls;
-                            if (msg === 'Success') {
-                                result = 'Message Sent Successfully To Email Administrator';
+                            if (response.success) {
+                                result = 'Message Sent Successfully!';
                                 cls = 'msg-success';
+                                $form[0].reset(); // clear input
                             } else {
-                                result = 'Error sending email.';
+                                result = response.message || 'Error sending email.';
                                 cls = 'msg-error';
                             }
 
-                            $form.prepend(
-                                $('<div />', {
-                                    'class': 'flat-alert ' + cls,
-                                    'text': result
-                                }).append(
-                                    $('<a class="close d-flex" href="#"><i class="icon icon-times-solid"></i></a>')
-                                )
+                            var alertBox = $('<div />', {
+                                'class': 'flat-alert ' + cls,
+                                'text': result,
+                                'style': 'margin-bottom: 20px; padding: 15px; border-radius: 8px; font-weight: 500; font-size: 16px; position: relative;'
+                            }).append(
+                                $('<a class="close d-flex" href="#" style="position: absolute; right: 15px; top: 15px;"><i class="icon icon-times-solid"></i></a>')
                             );
 
-                            $form.find(':input').not('.submit').val('');
+                            $form.prepend(alertBox);
+
+                            alertBox.find('.close').on('click', function(e) {
+                                e.preventDefault();
+                                $(this).parent('.flat-alert').remove();
+                            });
                         },
-                        complete: function (xhr, status, error_thrown) {
+                        error: function () {
+                            var alertBox = $('<div />', {
+                                'class': 'flat-alert msg-error',
+                                'text': 'Something went wrong. Please try again.',
+                                'style': 'margin-bottom: 20px; padding: 15px; border-radius: 8px; font-weight: 500; font-size: 16px; position: relative;'
+                            }).append(
+                                $('<a class="close d-flex" href="#" style="position: absolute; right: 15px; top: 15px;"><i class="icon icon-times-solid"></i></a>')
+                            );
+
+                            $form.prepend(alertBox);
+
+                            alertBox.find('.close').on('click', function(e) {
+                                e.preventDefault();
+                                $(this).parent('.flat-alert').remove();
+                            });
+                        },
+                        complete: function () {
                             $form.find('.loading').remove();
                         }
                     });

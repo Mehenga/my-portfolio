@@ -1123,14 +1123,13 @@
                                 <div class="section-contact-inner">
                                     <h1 class="fw-medium heading">Contact For <br> Work</h1>
 
-                                    <form class="form-contact" method="POST" action="https://api.web3forms.com/submit">
+                                    <form class="form-contact" id="form-contact" method="POST" action="https://api.web3forms.com/submit">
                                         <!-- ✅ Web3Forms Access Key -->
                                         <input type="hidden" name="access_key"
                                             value="224773ac-c393-4d19-8999-8e179b5b8ec6">
 
-                                        <!-- ✅ Redirect to thank you page -->
-                                        <input type="hidden" name="redirect" value="https://web3forms.com/success">
-                                        <!-- You can change this to your custom URL if needed -->
+                                        <!-- Removed redirect input for AJAX submission -->
+
 
                                         <!-- ✅ Name -->
                                         <fieldset class="fiel-name">
